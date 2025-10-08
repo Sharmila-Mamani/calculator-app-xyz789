@@ -143,6 +143,10 @@
 
             <button class="btn btn-number" onclick="appendNumber('0')">0</button>
             <button class="btn btn-equals" onclick="calculateResult()">=</button>
+
+            <!-- New buttons for square root and percentage -->
+            <button class="btn btn-operator" style="grid-column: span 2;" onclick="squareRoot()">√</button>
+            <button class="btn btn-operator" style="grid-column: span 2;" onclick="percentage()">%</button>
         </div>
     </div>
 
@@ -282,6 +286,81 @@
             if (currentInput === '' || currentInput === '-') {
                 currentInput = '0';
             }
+            updateDisplay();
+        }
+
+        /**
+         * Calculates the square root of the current input.
+         * Handles invalid input (e.g., negative numbers).
+         */
+        function squareRoot() {
+            let num = parseFloat(currentInput);
+            if (isNaN(num) || num < 0) {
+                currentInput = "Error"; // Simpler error message for invalid input
+            } else {
+                currentInput = Math.sqrt(num).toString();
+                // Limit decimal places if very long
+                if (currentInput.length > 12 && currentInput.includes('.')) {
+                    currentInput = parseFloat(currentInput).toFixed(8).toString();
+                    currentInput = currentInput.replace(/\.0+$/, "");
+                }
+            }
+            operator = null; // Unary operation clears any pending binary operation
+            previousInput = '';
+            resetDisplay = true; // Next number entry should clear this result
+            updateDisplay();
+        }
+
+        /**
+         * Calculates the percentage value based on current input and pending operation.
+         */
+        function percentage() {
+            let num = parseFloat(currentInput);
+            if (isNaN(num)) {
+                currentInput = "Error";
+                updateDisplay();
+                return;
+            }
+
+            if (operator && previousInput !== '') {
+                const prev = parseFloat(previousInput);
+                if (isNaN(prev)) {
+                    currentInput = "Error";
+                    updateDisplay();
+                    return;
+                }
+
+                switch (operator) {
+                    case '+':
+                    case '-':
+                        // e.g., 100 + 10% should result in 100 + (100 * 0.10)
+                        num = prev * (num / 100);
+                        break;
+                    case '*':
+                    case '/':
+                        // e.g., 100 * 10% should result in 100 * 0.10
+                        num = num / 100;
+                        break;
+                    default:
+                        num = num / 100; // Fallback, just convert current input to percentage
+                        break;
+                }
+            } else {
+                num = num / 100; // No pending operation, just convert current input to percentage
+            }
+
+            currentInput = num.toString();
+
+            // Limit decimal places if very long
+            if (currentInput.length > 12 && currentInput.includes('.')) {
+                currentInput = parseFloat(currentInput).toFixed(8).toString();
+                currentInput = currentInput.replace(/\.0+$/, "");
+            }
+            
+            // Do not clear operator or previousInput here. The percentage value becomes the new currentInput.
+            // If '=' is pressed next, calculateResult will use this new value.
+            // If another operator is pressed, calculateResult will run first with the new value.
+            resetDisplay = false; // Allow appending numbers to this percentage result or continue calculation
             updateDisplay();
         }
 
