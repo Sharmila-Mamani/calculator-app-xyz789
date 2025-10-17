@@ -6,187 +6,264 @@
     <title>Simple Calculator</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            background-color: #e0e0e0;
             margin: 0;
-            background-color: #f4f4f4;
         }
-        .calculator {
-            background-color: #333;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            padding: 20px;
+
+        #calculator {
+            background-color: #f2f2f2;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             width: 320px;
-        }
-        #display {
-            width: calc(100% - 20px);
-            height: 60px;
-            background-color: #444;
-            border: none;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            color: #fff;
-            text-align: right;
-            padding: 0 10px;
+            padding: 20px;
             box-sizing: border-box;
+        }
+
+        #display {
+            background-color: #333;
+            color: #fff;
+            font-size: 2.8em;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: right;
             overflow: hidden;
             white-space: nowrap;
+            text-overflow: ellipsis;
+            min-height: 1.2em; /* Ensure consistent height even for '0' */
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
         }
+
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
-        .button {
-            width: 100%;
-            height: 70px;
+
+        .btn {
+            background-color: #ffffff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            padding: 20px 0;
             font-size: 1.8em;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:hover {
+            background-color: #e6e6e6;
+        }
+
+        .number {
+            color: #333;
+        }
+
+        .operator {
+            background-color: #f0a500;
             color: #fff;
-            background-color: #666;
         }
-        .button:hover {
-            background-color: #888;
+
+        .operator:hover {
+            background-color: #cc8e00;
         }
-        .button.operator-button {
-            background-color: #f79232;
+
+        .clear {
+            background-color: #e74c3c;
+            color: #fff;
         }
-        .button.operator-button:hover {
-            background-color: #ff9d47;
+
+        .clear:hover {
+            background-color: #c0392b;
         }
-        #equals-button {
-            background-color: #28a745;
-            grid-column: span 4; /* Equals button spans all 4 columns */
+
+        .equals {
+            background-color: #2ecc71;
+            color: #fff;
+            grid-row: span 2; /* Make equals button span two rows */
         }
-        #equals-button:hover {
-            background-color: #218838;
+
+        .equals:hover {
+            background-color: #27ae60;
         }
-        #clear-button {
-            background-color: #dc3545;
-        }
-        #clear-button:hover {
-            background-color: #c82333;
+
+        /* Adjustments for specific button layout */
+        #zero {
+            grid-column: span 2; /* Make zero button span two columns */
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <input type="text" id="display" readonly value="0">
+    <div id="calculator">
+        <div id="display">0</div>
         <div class="buttons">
-            <button class="button" id="clear-button">C</button>
-            <button class="button operator-button">÷</button>
-            <button class="button operator-button">×</button>
-            <button class="button operator-button">-</button>
+            <button id="clear" class="btn clear">C</button>
+            <button id="backspace" class="btn operator">←</button>
+            <button id="divide" class="btn operator">/</button>
+            <button id="multiply" class="btn operator">*</button>
 
-            <button class="button number-button">7</button>
-            <button class="button number-button">8</button>
-            <button class="button number-button">9</button>
-            <button class="button operator-button">+</button>
+            <button class="btn number">7</button>
+            <button class="btn number">8</button>
+            <button class="btn number">9</button>
+            <button id="subtract" class="btn operator">-</button>
 
-            <button class="button number-button">4</button>
-            <button class="button number-button">5</button>
-            <button class="button number-button">6</button>
-            <button class="button number-button">.</button>
+            <button class="btn number">4</button>
+            <button class="btn number">5</button>
+            <button class="btn number">6</button>
+            <button id="add" class="btn operator">+</button>
 
-            <button class="button number-button">1</button>
-            <button class="button number-button">2</button>
-            <button class="button number-button">3</button>
-            <button class="button number-button">0</button>
+            <button class="btn number">1</button>
+            <button class="btn number">2</button>
+            <button class="btn number">3</button>
+            <button id="equals" class="btn equals">=</button>
 
-            <button class="button" id="equals-button">=</button>
+            <button id="zero" class="btn number">0</button>
+            <button id="decimal" class="btn number">.</button>
         </div>
     </div>
 
     <script>
-        const display = document.getElementById('display');
-        const buttons = document.querySelectorAll('.button');
-        let currentInput = '0';
-        let equalsPressed = false;
+        let currentInput = '0'; // What's currently displayed and being typed
+        let fullExpression = ''; // The full expression string to be evaluated
+        let awaitingNewNumber = false; // True if the next number input should clear currentInput
 
-        display.value = currentInput;
+        const displayElement = document.getElementById('display');
+        const buttons = document.querySelector('.buttons');
 
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                const buttonText = button.textContent;
-                const lastChar = currentInput.slice(-1);
-                const isLastCharOperator = ['+', '-', '×', '÷'].includes(lastChar);
+        function updateDisplay() {
+            displayElement.textContent = currentInput;
+        }
 
-                if (currentInput.startsWith("Error") && button.id !== 'clear-button') {
-                    currentInput = '0';
-                    equalsPressed = false;
-                }
-
-                if (button.id === 'clear-button') {
-                    currentInput = '0';
-                    equalsPressed = false;
-                } else if (button.id === 'equals-button') {
-                    if (equalsPressed && !currentInput.startsWith("Error")) return;
-                    
-                    try {
-                        let expressionToEvaluate = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
-                        
-                        if (isLastCharOperator) {
-                            expressionToEvaluate = expressionToEvaluate.slice(0, -1);
-                        }
-                        if (expressionToEvaluate === '') {
-                            currentInput = '0';
-                            return;
-                        }
-
-                        let result = eval(expressionToEvaluate);
-
-                        if (result === Infinity || result === -Infinity) {
-                            currentInput = "Error: Div by zero";
-                        } else if (isNaN(result)) {
-                            currentInput = "Error"; 
-                        } else {
-                            currentInput = parseFloat(result.toFixed(10)).toString(); 
-                        }
-                    } catch (e) {
-                        currentInput = "Error";
-                    }
-                    equalsPressed = true;
-                } else if (button.classList.contains('operator-button')) {
-                    equalsPressed = false; 
-                    
-                    if (isLastCharOperator) {
-                        currentInput = currentInput.slice(0, -1) + buttonText;
-                    } else {
-                        currentInput += buttonText;
-                    }
-                } else if (buttonText === '.') {
-                    equalsPressed = false;
-
-                    const parts = currentInput.split(/[\+\-\×\÷]/);
-                    const lastPart = parts[parts.length - 1];
-
-                    if (!lastPart.includes('.')) {
-                        if (isLastCharOperator) {
-                            currentInput += '0' + buttonText;
-                        } else if (currentInput === '0') {
-                            currentInput = '0' + buttonText;
-                        } else {
-                            currentInput += buttonText;
-                        }
-                    }
+        function handleNumber(number) {
+            if (awaitingNewNumber) {
+                currentInput = number;
+                awaitingNewNumber = false;
+            } else {
+                if (currentInput === '0' && number !== '.') {
+                    currentInput = number;
+                } else if (number === '.' && currentInput.includes('.')) {
+                    return; // Don't add multiple decimals
                 } else {
-                    if (equalsPressed || currentInput === '0') {
-                        currentInput = buttonText;
-                        equalsPressed = false;
-                    } else {
-                        currentInput += buttonText;
-                    }
+                    currentInput += number;
                 }
-                display.value = currentInput;
-            });
+            }
+            updateDisplay();
+        }
+
+        function handleOperator(nextOperator) {
+            // If an operator was pressed immediately after another operator, replace it
+            const lastCharOfFullExpression = fullExpression.slice(-1);
+            const isLastCharOperator = ['+', '-', '*', '/'].includes(lastCharOfFullExpression);
+
+            if (awaitingNewNumber && isLastCharOperator) {
+                fullExpression = fullExpression.slice(0, -1) + nextOperator;
+            } else {
+                // Prevent starting with an operator other than minus if expression is empty
+                if (fullExpression === '' && currentInput === '0' && nextOperator !== '-') {
+                    return;
+                }
+                fullExpression += currentInput + nextOperator;
+            }
+
+            awaitingNewNumber = true;
+            updateDisplay(); // Display doesn't change immediately, still shows current number
+        }
+
+        function handleEquals() {
+            if (fullExpression === '' && currentInput === '0') {
+                return; // Nothing to evaluate
+            }
+
+            // Append the last number to the full expression if a number was typed after the last operator
+            if (!awaitingNewNumber) {
+                fullExpression += currentInput;
+            }
+
+            try {
+                // Basic validation: Don't end with an operator before eval
+                const lastChar = fullExpression.slice(-1);
+                if (['+', '-', '*', '/'].includes(lastChar)) {
+                    fullExpression = fullExpression.slice(0, -1);
+                }
+
+                if (fullExpression === '') {
+                    currentInput = '0';
+                    fullExpression = '';
+                    awaitingNewNumber = false;
+                    updateDisplay();
+                    return;
+                }
+
+                // Use eval for simplicity as per "minimal" app brief
+                let result = eval(fullExpression);
+
+                if (isNaN(result) || !isFinite(result)) {
+                    currentInput = 'Error';
+                } else {
+                    currentInput = String(result);
+                }
+                fullExpression = currentInput; // Set result as new base for chain operations
+                awaitingNewNumber = true;
+            } catch (error) {
+                currentInput = 'Error';
+                fullExpression = '';
+                awaitingNewNumber = false;
+            }
+            updateDisplay();
+        }
+
+        function handleClear() {
+            currentInput = '0';
+            fullExpression = '';
+            awaitingNewNumber = false;
+            updateDisplay();
+        }
+
+        function handleBackspace() {
+            if (currentInput === 'Error' || awaitingNewNumber) {
+                // If in error state or awaiting new number, backspace resets to '0'
+                currentInput = '0';
+                awaitingNewNumber = false;
+                updateDisplay();
+                return;
+            }
+            
+            currentInput = currentInput.slice(0, -1);
+            if (currentInput === '') {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        buttons.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target.classList.contains('btn')) return;
+
+            if (target.classList.contains('number')) {
+                handleNumber(target.textContent);
+            } else if (target.classList.contains('operator') && target.id !== 'backspace') {
+                handleOperator(target.textContent);
+            } else if (target.classList.contains('clear')) {
+                handleClear();
+            } else if (target.classList.contains('equals')) {
+                handleEquals();
+            } else if (target.id === 'backspace') {
+                handleBackspace();
+            }
         });
+
+        updateDisplay(); // Initialize display with '0'
     </script>
 </body>
 </html>
