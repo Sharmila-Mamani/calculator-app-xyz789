@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,259 +11,256 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #e0e0e0;
             margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
         }
 
-        #calculator {
-            background-color: #f2f2f2;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            width: 320px;
+        .calculator {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
             padding: 20px;
-            box-sizing: border-box;
+            max-width: 320px;
+            width: 100%;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 15px;
         }
 
         #display {
-            background-color: #333;
-            color: #fff;
-            font-size: 2.8em;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            width: calc(100% - 20px);
+            padding: 10px;
+            font-size: 2.5em;
             text-align: right;
+            border: none;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #333;
             overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            min-height: 1.2em; /* Ensure consistent height even for '0' */
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
         }
 
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
 
         .btn {
-            background-color: #ffffff;
+            background-color: #f0f0f0;
             border: none;
             border-radius: 8px;
             padding: 20px 0;
-            font-size: 1.8em;
+            font-size: 1.5em;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            color: #333;
-        }
-
-        .btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            color: #555;
+            outline: none;
         }
 
         .btn:hover {
-            background-color: #e6e6e6;
+            background-color: #e0e0e0;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
         }
 
-        .number {
-            color: #333;
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #d0d0d0;
         }
 
-        .operator {
-            background-color: #f0a500;
-            color: #fff;
+        .btn.operator {
+            background-color: #ffe0b2;
+            color: #d84315;
         }
 
-        .operator:hover {
-            background-color: #cc8e00;
+        .btn.operator:hover {
+            background-color: #ffcc80;
         }
 
-        .clear {
-            background-color: #e74c3c;
-            color: #fff;
+        .btn.equals {
+            background-color: #a5d6a7;
+            color: #2e7d32;
         }
 
-        .clear:hover {
-            background-color: #c0392b;
+        .btn.equals:hover {
+            background-color: #81c784;
         }
 
-        .equals {
-            background-color: #2ecc71;
-            color: #fff;
-            grid-row: span 2; /* Make equals button span two rows */
+        .btn.clear {
+            background-color: #ffcdd2;
+            color: #c62828;
         }
 
-        .equals:hover {
-            background-color: #27ae60;
+        .btn.clear:hover {
+            background-color: #ef9a9a;
         }
 
-        /* Adjustments for specific button layout */
-        #zero {
-            grid-column: span 2; /* Make zero button span two columns */
+        .btn.zero {
+            grid-column: span 2;
         }
     </style>
 </head>
 <body>
-    <div id="calculator">
-        <div id="display">0</div>
+    <div class="calculator">
+        <input type="text" id="display" value="0" readonly>
         <div class="buttons">
-            <button id="clear" class="btn clear">C</button>
-            <button id="backspace" class="btn operator">←</button>
-            <button id="divide" class="btn operator">/</button>
-            <button id="multiply" class="btn operator">*</button>
+            <button class="btn clear">C</button>
+            <button class="btn operator">/</button>
+            <button class="btn operator">*</button>
+            <button class="btn operator">-</button>
 
             <button class="btn number">7</button>
             <button class="btn number">8</button>
             <button class="btn number">9</button>
-            <button id="subtract" class="btn operator">-</button>
+            <button class="btn operator">+</button>
 
             <button class="btn number">4</button>
             <button class="btn number">5</button>
             <button class="btn number">6</button>
-            <button id="add" class="btn operator">+</button>
+            <button class="btn equals">=</button>
 
             <button class="btn number">1</button>
             <button class="btn number">2</button>
             <button class="btn number">3</button>
-            <button id="equals" class="btn equals">=</button>
+            <button class="btn decimal">.</button>
 
-            <button id="zero" class="btn number">0</button>
-            <button id="decimal" class="btn number">.</button>
+            <button class="btn zero number">0</button>
         </div>
     </div>
 
     <script>
-        let currentInput = '0'; // What's currently displayed and being typed
-        let fullExpression = ''; // The full expression string to be evaluated
-        let awaitingNewNumber = false; // True if the next number input should clear currentInput
-
-        const displayElement = document.getElementById('display');
+        const display = document.getElementById('display');
         const buttons = document.querySelector('.buttons');
 
+        let displayValue = '0';
+        let firstOperand = null;
+        let operator = null;
+        let waitingForSecondOperand = false;
+
         function updateDisplay() {
-            displayElement.textContent = currentInput;
+            display.value = displayValue;
         }
 
-        function handleNumber(number) {
-            if (awaitingNewNumber) {
-                currentInput = number;
-                awaitingNewNumber = false;
+        function clearAll() {
+            displayValue = '0';
+            firstOperand = null;
+            operator = null;
+            waitingForSecondOperand = false;
+            updateDisplay();
+        }
+
+        function inputDigit(digit) {
+            if (waitingForSecondOperand === true) {
+                displayValue = digit;
+                waitingForSecondOperand = false;
             } else {
-                if (currentInput === '0' && number !== '.') {
-                    currentInput = number;
-                } else if (number === '.' && currentInput.includes('.')) {
-                    return; // Don't add multiple decimals
-                } else {
-                    currentInput += number;
-                }
+                displayValue = displayValue === '0' || displayValue === 'Error' ? digit : displayValue + digit;
+            }
+            updateDisplay();
+        }
+
+        function inputDecimal() {
+            if (waitingForSecondOperand === true) {
+                displayValue = '0.';
+                waitingForSecondOperand = false;
+                updateDisplay();
+                return;
+            }
+            if (!displayValue.includes('.')) {
+                displayValue += '.';
             }
             updateDisplay();
         }
 
         function handleOperator(nextOperator) {
-            // If an operator was pressed immediately after another operator, replace it
-            const lastCharOfFullExpression = fullExpression.slice(-1);
-            const isLastCharOperator = ['+', '-', '*', '/'].includes(lastCharOfFullExpression);
+            const inputValue = parseFloat(displayValue);
 
-            if (awaitingNewNumber && isLastCharOperator) {
-                fullExpression = fullExpression.slice(0, -1) + nextOperator;
-            } else {
-                // Prevent starting with an operator other than minus if expression is empty
-                if (fullExpression === '' && currentInput === '0' && nextOperator !== '-') {
-                    return;
-                }
-                fullExpression += currentInput + nextOperator;
-            }
-
-            awaitingNewNumber = true;
-            updateDisplay(); // Display doesn't change immediately, still shows current number
-        }
-
-        function handleEquals() {
-            if (fullExpression === '' && currentInput === '0') {
-                return; // Nothing to evaluate
-            }
-
-            // Append the last number to the full expression if a number was typed after the last operator
-            if (!awaitingNewNumber) {
-                fullExpression += currentInput;
-            }
-
-            try {
-                // Basic validation: Don't end with an operator before eval
-                const lastChar = fullExpression.slice(-1);
-                if (['+', '-', '*', '/'].includes(lastChar)) {
-                    fullExpression = fullExpression.slice(0, -1);
-                }
-
-                if (fullExpression === '') {
-                    currentInput = '0';
-                    fullExpression = '';
-                    awaitingNewNumber = false;
-                    updateDisplay();
-                    return;
-                }
-
-                // Use eval for simplicity as per "minimal" app brief
-                let result = eval(fullExpression);
-
-                if (isNaN(result) || !isFinite(result)) {
-                    currentInput = 'Error';
-                } else {
-                    currentInput = String(result);
-                }
-                fullExpression = currentInput; // Set result as new base for chain operations
-                awaitingNewNumber = true;
-            } catch (error) {
-                currentInput = 'Error';
-                fullExpression = '';
-                awaitingNewNumber = false;
-            }
-            updateDisplay();
-        }
-
-        function handleClear() {
-            currentInput = '0';
-            fullExpression = '';
-            awaitingNewNumber = false;
-            updateDisplay();
-        }
-
-        function handleBackspace() {
-            if (currentInput === 'Error' || awaitingNewNumber) {
-                // If in error state or awaiting new number, backspace resets to '0'
-                currentInput = '0';
-                awaitingNewNumber = false;
-                updateDisplay();
+            if (operator && waitingForSecondOperand) {
+                operator = nextOperator;
                 return;
             }
-            
-            currentInput = currentInput.slice(0, -1);
-            if (currentInput === '') {
-                currentInput = '0';
+
+            if (firstOperand === null && !isNaN(inputValue)) {
+                firstOperand = inputValue;
+            } else if (operator) {
+                const result = operate(firstOperand, inputValue, operator);
+                if (result === 'Error') {
+                    displayValue = 'Error';
+                    firstOperand = null;
+                    operator = null;
+                    waitingForSecondOperand = false;
+                } else {
+                    displayValue = String(parseFloat(result.toFixed(7)));
+                    firstOperand = result;
+                }
             }
+
+            waitingForSecondOperand = true;
+            operator = nextOperator;
             updateDisplay();
+        }
+
+        function operate(num1, num2, op) {
+            if (op === '+') {
+                return num1 + num2;
+            } else if (op === '-') {
+                return num1 - num2;
+            } else if (op === '*') {
+                return num1 * num2;
+            } else if (op === '/') {
+                if (num2 === 0) {
+                    return 'Error';
+                }
+                return num1 / num2;
+            }
+            return num2;
         }
 
         buttons.addEventListener('click', (event) => {
-            const target = event.target;
-            if (!target.classList.contains('btn')) return;
+            const { target } = event;
+
+            if (!target.matches('button')) {
+                return;
+            }
+
+            if (target.classList.contains('operator')) {
+                handleOperator(target.textContent);
+                return;
+            }
 
             if (target.classList.contains('number')) {
-                handleNumber(target.textContent);
-            } else if (target.classList.contains('operator') && target.id !== 'backspace') {
-                handleOperator(target.textContent);
-            } else if (target.classList.contains('clear')) {
-                handleClear();
-            } else if (target.classList.contains('equals')) {
-                handleEquals();
-            } else if (target.id === 'backspace') {
-                handleBackspace();
+                inputDigit(target.textContent);
+                return;
+            }
+
+            if (target.classList.contains('decimal')) {
+                inputDecimal();
+                return;
+            }
+
+            if (target.classList.contains('clear')) {
+                clearAll();
+                return;
+            }
+
+            if (target.classList.contains('equals')) {
+                if (firstOperand === null || operator === null) {
+                    return;
+                }
+                handleOperator(operator);
+                operator = null;
+                waitingForSecondOperand = false;
+                return;
             }
         });
 
-        updateDisplay(); // Initialize display with '0'
+        updateDisplay();
     </script>
 </body>
 </html>
